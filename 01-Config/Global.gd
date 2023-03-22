@@ -56,7 +56,27 @@ func restart_level():
 # ----------------------------------------------------------
 	
 func save_game():
-	pass
+	save_data["general"]["coins"] = []					# creating a list of all the coins that appear in the scene
+	save_data["general"]["mines"] = []					# creating a list of all the mines in the scene
+	for c in Coins.get_children():						# returns a list of all the nodes in /Game/Coins
+		save_data["general"]["coins"].append(c.position)		# adds the coins to the list
+	for m in Mines.get_children():
+		save_data["general"]["mines"].append(m.position)
+	for section in save_data.keys():					# Go through all the coins and mines and add them as keys to the config file
+		for key in save_data[section]:
+			save_file.set_value(section, key, save_data[section][key])
+	save_file.save(SAVE_PATH)						# write the data to the config file
 
 func load_game():
-	pass
+	var error = save_file.load(SAVE_PATH)					# load the keys out of the config file
+	if error != OK:								# if there's a problem reading the file, print an error
+		print("Failed loading file")
+		return
+	
+	save_data["general"]["coins"] = []					# initialize a list to temporarily hold the coins and mines
+	save_data["general"]["mines"] = []
+	for section in save_data.keys():
+		for key in save_data[section]:					# go through everything in the config file and add it to the lists
+			save_data[section][key] = save_file.get_value(section, key, null)
+	var _scene = get_tree().change_scene_to(Game)				# reset the scene
+	call_deferred("restart_level")						# when the scene has been loaded, call the reset_level method

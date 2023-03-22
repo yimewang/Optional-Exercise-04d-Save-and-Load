@@ -183,6 +183,7 @@ margin_top = 400.0
 margin_right = 612.0
 margin_bottom = 440.0
 text = "Quit Game"
+
 [connection signal="pressed" from="UI/Menu/Save" to="UI/Menu" method="_on_Save_pressed"]
 [connection signal="pressed" from="UI/Menu/Load" to="UI/Menu" method="_on_Load_pressed"]
 [connection signal="pressed" from="UI/Menu/Quit" to="UI/Menu" method="_on_Quit_pressed"]
